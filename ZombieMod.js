@@ -258,8 +258,8 @@ function averageMod(msg)
 {
     easyMod(msg);
     madLib(msg, '\\b(com|cum)(m)?', verbArray);
-    madLib(msg, '\\b(daddy)(\\w+)?', nounArray);
-    madLib(msg, '\\b(suck)(k)?', verbArray);
+    madLib(msg, '\\b(dad)(\\w+)?', nounArray);
+    madLib(msg, '\\b(suc)(k)?(\\w+)?', verbArray);
     madLib(msg, '\\b(lick|lic|lik)(k)?', verbArray);
 }
 
