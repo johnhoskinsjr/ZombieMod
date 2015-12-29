@@ -159,25 +159,8 @@ cb.onEnter(function(user)
                             It\'s your favorite zombie ;) Mwuah!'
                             ,cb.room_slug ,'','#00b33c','bold');
             }
-            else
-            {
-                cb.chatNotice('Hi beautiful ' + broadcasterName + '. I\'m CajunZombie. \n\
-                               I am the creator of Zombie Mad Libs. \n\
-                                Let me know if you have any questions. ' + heart,
-                                cb.room_slug ,'','#00b33c','bold');
-            };
         };
     };
-    
-    if(user = cb.room_slug)
-    {
-        cb.sendNotice('Good morning Kitty! I hope you have a wonderful day! Mwuah!\n\
-                        Type /beefup if you want to increase level of filtering. \n\
-                       Type /beefdown if you want to lower level of filtering.\n\
-                        Type /kitty if you want to turn off mad libs.\n\
-                        Type /zombie if you want to turn on mad libs.',
-                    cb.room_slug ,'','#00b33c','bold');
-    }
 });
 
 /*
@@ -369,7 +352,7 @@ cb.onMessage(function (msg)
 //This function is called when the tip event happens
 cb.onTip(function (tip) 
 {
-    if(filter_tipnote)
+    if(is_tipnote)
     {
         //Block swear words from tipnote if broadcaster wants
         blockSwearWords(tip, true);
