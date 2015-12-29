@@ -421,7 +421,7 @@ function easyMod(msg)
         madLib(msg, '\\b(pus*\\w+|clit|cunt|klit|kunt)(\\w+)?', nounArray,true,'\\b(wet)(\\w+)?',adjArray);
         madLib(msg, '\\b(di|co)(c)?(k)?(\\w+)?', nounArray,true,'\\b(hard)(\\w+)?',adjArray);
         madLib(msg, '\\b(sq)(u)?(i)(u)?(rt)', verbArray);
-        madLib(msg, '\\b(fart)(\\w+)?');
+        madLib(msg, '\\b(fart)(\\w+)?', verbArray);
     }
     else
     {
