@@ -11,6 +11,7 @@ var logout_time = 0,  //Records login time of me, so i dont blast notice for bad
     is_baby,
     is_swear,
     mad_lib,
+    no_feet,
     is_tipnote,
     modEnum = 
     {
@@ -105,6 +106,16 @@ function init()
     else
     {
         is_swear = false;
+    };
+    
+    //Intializes if broadcaster wants to block feet
+    if(cb['settings'].no_feet == 'Yes')
+    {
+        no_feet = true;
+    }
+    else
+    {
+        no_feet = false;
     };
     
     //Initializes if broadcaster wants to use mad libs
@@ -312,6 +323,17 @@ cb.onMessage(function (msg)
                     return msg;
             };
     };
+    //Check for feet request if broadcaster wants to
+    if(no_feet)
+    {
+        //Third if broadcaster want to block sticky keys
+        var feet = msg['m'].search(/(.+)?(please)?(.+)?(show|see)(.+)?(feet)(.+)?(please)?(.+)?/i);
+            if(feet > -1)
+            {
+                    msg['m'] = 'Sorry, I forgot feet request belongs in tipnote...';
+                    return msg;
+            };
+    };
     //Block baby names if broadcaster wants to
     if(is_baby)
     {
@@ -390,6 +412,9 @@ cb.settings_choices = [
     {name:'is_swear', type:'choice',
         choice1:'Yes',
         choice2:'No', defaultValue: 'Yes', label:'Block Swear Words'},
+    {name:'no_feet', type:'choice',
+        choice1:'Yes',
+        choice2:'No', defaultValue: 'Yes', label:'Block Feet Request'},
     {name:'is_tipnote', type:'choice',
         choice1:'Yes',
         choice2:'No', defaultValue: 'No', label:'Filter Tipnotes'}
@@ -401,17 +426,21 @@ function easyMod(msg)
     //Check if broadcaster wants to use mad libs
     if(mad_lib)
     {
-        madLib(msg, '\\b(pus*\\w+|clit|cunt|klit|kunt)(\\w+)?', nounArray,true,'\\b(wet)(\\w+)?',adjArray);
-        madLib(msg, '\\b(di|co)(c)?(k)?(\\w+)?', nounArray,true,'\\b(hard)(\\w+)?',adjArray);
-        madLib(msg, '\\b(sq)(u)?(i)(u)?(rt)', verbArray);
-        madLib(msg, '\\b(fart)(\\w+)?', verbArray);
+        madLib(msg, '^(\\W+)?(pus*\\w+|clit|cunt|klit|kunt)(\\w+)?', nounArray,true,'\\b(wet)(\\w+)?',adjArray);
+        madLib(msg, '^(\\W+)?(\\s+)?(p)(\\s+)?(u)(\\s+)?(s)(\\s+)(s)?(\\s+)(y)(\\s+)?(\\W+)?$', nounArray,true,'\\b(wet)(\\w+)?',adjArray);
+        madLib(msg, '^(\\W+)?(di|co)(c|k|ck|q)$', nounArray,true,'\\b(hard)(\\w+)?',adjArray);
+        madLib(msg, '^(\\W+)? (\\s+)? (d|c)(\\s+)?(i|o)(\\s+)?(c)(\\s+)(k)?(\\s+)?(\\W+)?$', nounArray,true,'\\b(hard)(\\w+)?',adjArray);
+        madLib(msg, '^(\\W+)?(sq)(u)?(i)(u)?(rt)', verbArray);
+        madLib(msg, '^(\\W+)?(fart)(\\W+)?', verbArray);
     }
     else
     {
-        insertWord(msg, '\\b(pus*\\w+|clit|cunt|klit|kunt)(\\w+)?',true,'\\b(wet)(\\w+)?');
-        insertWord(msg, '\\b(di|co)(c)?(k)?(\\w+)?',true,'\\b(hard)(\\w+)?');
-        insertWord(msg, '\\b(sq)(u)?(i)(u)?(rt)');
-        insertWord(msg, '\\b(fart)(\\w+)?');
+        insertWord(msg, '^(\\W+)?(pus*\\w+|clit|cunt|klit|kunt)(\\w+)?',true,'\\b(wet)(\\w+)?');
+        insertWord(msg, '^(\\W+)?(\\s+)?(p)(\\s+)?(u)(\\s+)?(s)(\\s+)(s)?(\\s+)(y)(\\s+)?(\\W+)?$',true,'\\b(hard)(\\w+)?');
+        insertWord(msg, '^(\\W+)? (\\s+)? (d|c)(\\s+)?(i|o)(\\s+)?(c)(\\s+)(k)?(\\s+)?(\\W+)?$');
+        insertWord(msg, '^(\\W+)?(fart)(\\w+)?');
+        insertWord(msg, '^(\\W+)?(sq)(u)?(i)(u)?(rt)');
+        insertWord(msg, '^(\\W+)?(di|co)(c|k|ck|q)$',true,'\\b(hard)(\\w+)?');
     }
 }
 
@@ -421,18 +450,18 @@ function averageMod(msg)
     if(mad_lib)
     {
         easyMod(msg);
-        madLib(msg, '\\b(com|cum|kum|kom)(m)?(e)?', verbArray);
-        madLib(msg, '\\b(dad)(d)?(y)?(\\w+)?', nounArray);
-        madLib(msg, '\\b(su)(k)?(c)?(k)?', verbArray);
-        madLib(msg, '\\b(lic|lik)(k)?', verbArray);
+        madLib(msg, '^(\\W+)?(com|cum|kum|kom)(m)?(e)?(\\W+)?$', verbArray);
+        madLib(msg, '^(\\W+)?(dad)(d)?(y)?(\\W+)?$', nounArray);
+        madLib(msg, '^(\\W+)?(su)(c|k|ck|q)(\\W+)?$', verbArray);
+        madLib(msg, '^(\\W+)?(lic|lik)(k)?(\\W+)?$', verbArray);
     }
     else
     {
         easyMod(msg);
-        insertWord(msg, '\\b(com|cum|kum|kom)(m)?(e)?');
-        insertWord(msg, '\\b(dad)(d)?(y)?(\\w+)?');
-        insertWord(msg, '\\b(su)(k)?(c)?(k)?');
-        insertWord(msg, '\\b(lic|lik)(k)?');
+        insertWord(msg, '^(\\W+)?(com|cum|kum|kom)(m)?(e)?');
+        insertWord(msg, '^(\\W+)?(dad)(d)?(y)?(\\w+)?');
+        insertWord(msg, '^(\\W+)?(su)(k)?(c)?(k)?');
+        insertWord(msg, '^(\\W+)?(lic|lik)(k)?');
     }
 }
 
@@ -442,14 +471,14 @@ function toughMod(msg)
     if(mad_lib)
     {
         averageMod(msg);
-        madLib(msg, '\\b(tit)t?(s|ies|ie)?(\\w+)?', nounArray,true,'\\b(big|fat|huge)(\\w+)?',adjArray);
-        madLib(msg, '\\b(ass)(hol)?(\\w+)?', nounArray);
+        madLib(msg, '^(\\W+)?(tit)t?(s|ies|ie)?(\\w+)?', nounArray,true,'\\b(big|fat|huge)(\\w+)?',adjArray);
+        madLib(msg, '^(\\W+)?(ass)(hol)?(\\w+)?', nounArray);
     }
     else
     {
         averageMod(msg);
-        insertWord(msg, '\\b(tit)t?(s|ies|ie)?(\\w+)?',true,'\\b(big|fat|huge)(\\w+)?');
-        insertWord(msg, '\\b(ass)(hol)?(\\w+)?');
+        insertWord(msg, '^(tit)t?(s|ies|ie)?(\\w+)?',true,'\\b(big|fat|huge)(\\w+)?');
+        insertWord(msg, '^(ass)(hol)?(\\w+)?');
     }
 }
 
