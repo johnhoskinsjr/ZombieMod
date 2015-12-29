@@ -421,7 +421,7 @@ function easyMod(msg)
         madLib(msg, '\\b(pus*\\w+|clit|cunt|klit|kunt)(\\w+)?', nounArray,true,'\\b(wet)(\\w+)?',adjArray);
         madLib(msg, '\\b(di|co)(c)?(k)?(\\w+)?', nounArray,true,'\\b(hard)(\\w+)?',adjArray);
         madLib(msg, '\\b(sq)(u)?(i)(u)?(rt)', verbArray);
-        madLib(msg, '\\b(fart)(\\w+)?', 'Applauded my digestive system');
+        madLib(msg, '\\b(fart)(\\w+)?');
     }
     else
     {
@@ -430,20 +430,6 @@ function easyMod(msg)
         insertWord(msg, '\\b(sq)(u)?(i)(u)?(rt)');
         insertWord(msg, '\\b(fart)(\\w+)?');
     }
-    /*
-    var indexCount = msg['m'].match(/(pus*\w+|clit|cunt)/gi);
-    var numberAppearences = indexCount.length;
-    for(i=0;i<numberAppearences;i++)
-    {
-        var noun = Math.floor(Math.random()*nounArray.length);
-        msg['m'] = msg['m'].replace(/(pus*\w+|clit|cunt)/i, nounArray[noun]); //Pussy
-    }
-    indexCount = msg['m'].match(/(dick|cock)/gi);
-    numberAppearences = indexCount.length;
-    for
-    noun = Math.floor(Math.random()*nounArray.length);
-    msg['m'] = msg['m'].replace(/(dick|cock)/i, nounArray[noun]); //Dick
-    */
 }
 
 //This function handles filtering on average mode
@@ -465,11 +451,6 @@ function averageMod(msg)
         insertWord(msg, '\\b(su)(k)?(c)?(k)?');
         insertWord(msg, '\\b(lic|lik)(k)?');
     }
-    /*
-    msg['m'] = msg['m'].replace(/(com|cum)e?/gi, verbArray[0]); //Cum
-    msg['m'] = msg['m'].replace(/daddy/gi, nounArray[3]); //daddy
-    msg['m'] = msg['m'].replace(/(lick|lic|lik)/gi, adjArray[3]); //lick
-    */
 }
 
 //This function handles filtering on body guard mode
@@ -487,10 +468,6 @@ function toughMod(msg)
         insertWord(msg, '\\b(tit)t?(s|ies|ie)?(\\w+)?',true,'\\b(big|fat|huge)(\\w+)?');
         insertWord(msg, '\\b(ass)(hol)?(\\w+)?');
     }
-    /*
-    msg['m'] = msg['m'].replace(/\b(tit)t?(s|ies|ie)?/gi, nounArray[2]); //Tits
-    msg['m'] = msg['m'].replace(/\b(ass)(hol)?e?/gi, nounArray[2]); //Ass
-    */
 }
 
 /*
@@ -580,185 +557,3 @@ function insertWord(msg, expression, is_optional, optional_regex)
         };
     };
 };
-/*
-//This function used to set all message font to the same font
-function blockFont(msg)
-{
-    //If user is using a special font, set their font to Arial
-    if(msg['f'] !== 'Bookman Old Style')
-    {
-        msg['f'] = 'Bookman Old Style';
-    };
-}
-
-//This function is used to stop sticky keys
-function blockStickyKeys(msg, tipnote)
-{
-    //Sets default values
-    if (typeof(tipnote)==='undefined') tipnote = false;
-    if(is_sticky)
-    {
-        if(!tipnote)
-        {
-           var sticky = msg['m'].search(/(.)\1{3,}/i, 'Sorry, I face smashed my keyboard..');
-            if(sticky > -1)
-            {
-                msg['m'] = 'Sorry, I face smashed my keyboard...';
-                return msg;
-            }; 
-        }
-        if(tipnote)
-        {
-            var sticky = tip['message'].search(/(.)\1{3,}/i, 'Sorry, I face smashed my keyboard..');
-            if(sticky > -1)
-            {
-                tip['message'] = 'Sorry, I face smashed my keyboard...';
-                return msg;
-            }; 
-        }
-        
-    };
-}
-
-//This function checks for broadcaster commands
-function commandCheck(msg)
-{
-    if(msg['user'] == cb.room_slug)
-    {
-        //Handles beefup command
-        if(msg['m'] == '/beefup')
-        {
-            switch(modLvl)
-            {
-                case modEnum.off:
-                    modLvl = modEnum.easy;
-                    cb.sendNotice('Zombie Mod was turned on!',cb.room_slug,'','#00b33c','bold');
-                    break;
-                case modEnum.easy:
-                    modLvl = modEnum.avg;
-                    cb.sendNotice('Zombie Mod was beefed up to average!',cb.room_slug,'','#00b33c','bold');
-                    break;
-                case modEnum.avg:
-                    modLvl = modEnum.tough;
-                    cb.sendNotice('Zombie Mod was beefed up to body guard!',cb.room_slug,'','#00b33c','bold');
-                    break;
-                case modEnum.tough:
-                    cb.sendNotice('Can\'t beef up anymore. \n\
-                                    If you want more words added, contact CajunZombie',cb.room_slug,'','#00b33c','bold');
-            }
-            msg['X-Spam'] = true;
-            msg['m'] = 'Let\'s play nice boys!';
-            return msg;
-        };
-        
-        //Handles /beefdown command
-        if(msg['m'] == '/beefdown')
-        {
-            switch(modLvl)
-            {
-                case modEnum.off:
-                    cb.sendNotice('Zombie Mod is turned on!',cb.room_slug,'','#00b33c','bold');
-                    break;
-                case modEnum.easy:
-                    modLvl = modEnum.off;
-                    cb.sendNotice('This is the lowest setting.',cb.room_slug,'','#00b33c','bold');
-                    break;
-                case modEnum.avg:
-                    modLvl = modEnum.easy;
-                    cb.sendNotice('Zombie Mod was beefed down to easy!',cb.room_slug,'','#00b33c','bold');
-                    break;
-                case modEnum.tough:
-                    modLvl = modEnum.avg;
-                    cb.sendNotice('Zombie Mod was beefed down to average!',cb.room_slug,'','#00b33c','bold');
-            }
-            msg['X-Spam'] = true;
-            msg['m'] = 'Let\'s have some fun. ;)';
-            return msg;
-        };
-    };
-}
-
-//This function checks to see if mod sent message to prevent filter
-function modMessage(msg)
-{
-    if(msg['is_mod'] == true || msg['user'] == cb.room_slug)
-    {
-      return msg;  
-    };
-    
-}
-
-//This function is used to block baby names from users
-function blockBabyNames(msg, tipnote)
-{
-    //Sets default values
-    if (typeof(tipnote)==='undefined') tipnote = false;
-    if(is_baby)
-    {
-        if(!tipnote)
-        {
-            var greeting = msg['m'].search(/(hey|hi|hello)/i);  //Looks for a greeting to tell if its a nickname
-            msg['m'] = msg['m'].replace(/(cutie|cuttie|bb|baby|bab|sweet(?=(t|y|i|e|ie))|sweat(?=(t|y|i|e|ie)))t?(e|ie|y)?/gi, broadcasterName); //Baby
-            if(greeting > -1)
-            {
-                msg['m'] = msg['m'].replace(/(sex)y?/i, broadcasterName);  //Replace sexy if there is a greeting
-            };
-        };
-        
-        //If it's a tipnote message
-        if(tipnote)
-        {
-            var greeting = tip['message'].search(/(hey|hi|hello)/i);  //Looks for a greeting to tell if its a nickname
-            tip['message'] = tip['message'].replace(/(cutie|cuttie|bb|baby|bab|sweet(?=(t|y|i|e|ie))|sweat(?=(t|y|i|e|ie)))t?(e|ie|y)?/gi, broadcasterName); //Baby
-            if(greeting > -1)
-            {
-                tip['message'] = tip['message'].replace(/(sex)y?/i, broadcasterName);  //Replace sexy if there is a greeting
-            };
-        };
-    }
-};
-//Block swear words if broadcaster wants to
-function blockSwearWords(msg, tipnote)
-{
-    //Sets default values
-    if (typeof(tipnote)==='undefined') tipnote = false;
-    if(is_swear)
-    {
-        if(!tipnote)
-        {
-            msg['m'] = msg['m'].replace(/(fuck|fuk)/gi, swear[0]); //Fuck
-            msg['m'] = msg['m'].replace(/bitch/gi, swear[1]); //Bitch
-            msg['m'] = msg['m'].replace(/shit/gi, swear[2]); //Shit
-        }
-        if(tipnote)
-        {
-            tip['message'] = tip['message'].replace(/(fuck|fuk)/gi, swear[0]); //Fuck
-            tip['message'] = tip['message'].replace(/bitch/gi, swear[1]); //Bitch
-            tip['message'] = tip['message'].replace(/shit/gi, swear[2]); //Shit
-        }
-    };
-}
-/*
-* This function decides what filter to use if any based
-* on broadcaster settings.
-*/
-/*
-function filterMessage(msg)
-{
-    if(modLvl !== modEnum.off)
-    {
-        switch(modLvl)
-        {
-            case modEnum.easy:
-                easyMod(msg);
-                break;
-            case modEnum.avg:
-                averageMod(msg);
-                break;
-            case modEnum.tough:
-                toughMod(msg);
-                break;
-        };
-    };
-}
-*/
