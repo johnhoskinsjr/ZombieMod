@@ -54,7 +54,7 @@ var logout_time = 0,  //Records login time of me, so i dont blast notice for bad
     insertedWord = '..meow..',
     
     //The font used for font blocker
-    replaceFont = 'Bookman Old Style';
+    replaceFont = 'Comic Sans';
 
 function init()
 {   
@@ -98,16 +98,6 @@ function init()
         is_baby = false;
     };
     
-    //Initializes if broadcaster wants to block swear words
-    if(cb['settings'].is_swear == 'Yes')
-    {
-        is_swear = true;
-    }
-    else
-    {
-        is_swear = false;
-    };
-    
     //Intializes if broadcaster wants to block feet
     if(cb['settings'].no_feet == 'Yes')
     {
@@ -116,6 +106,16 @@ function init()
     else
     {
         no_feet = false;
+    };
+    
+    //Initializes if broadcaster wants to block swear words
+    if(cb['settings'].is_swear == 'Yes')
+    {
+        is_swear = true;
+    }
+    else
+    {
+        is_swear = false;
     };
     
     //Initializes if broadcaster wants to use mad libs
@@ -323,17 +323,6 @@ cb.onMessage(function (msg)
                     return msg;
             };
     };
-    //Check for feet request if broadcaster wants to
-    if(no_feet)
-    {
-        //Third if broadcaster want to block sticky keys
-        var feet = msg['m'].search(/(.+)?(please)?(.+)?(show|see)(.+)?(feet)(.+)?(please)?(.+)?/i);
-            if(feet > -1)
-            {
-                    msg['m'] = 'Sorry, I forgot feet request belongs in tipnote...';
-                    return msg;
-            };
-    };
     //Block baby names if broadcaster wants to
     if(is_baby)
     {
@@ -344,6 +333,18 @@ cb.onMessage(function (msg)
             msg['m'] = msg['m'].replace(/(sex|gurl|girl)y?(\\w+)?/gi, broadcasterName);  //Replace sexy if there is a greeting
         }
     }
+    
+    //Check for feet request if broadcaster wants to
+    if(no_feet)
+    {
+        //Third if broadcaster want to block sticky keys
+        var feet = msg['m'].search(/(.+)?(please)?(.+)?(show|see)(.+)?(feet)(.+)?(please)?(.+)?/i);
+            if(feet > -1)
+            {
+                    msg['m'] = 'Sorry, I forgot feet request belong in tipnotes...';
+                    return msg;
+            };
+    };
     
     //Check for sticky keys if broadcaster wants to
     if(is_swear)
@@ -426,21 +427,17 @@ function easyMod(msg)
     //Check if broadcaster wants to use mad libs
     if(mad_lib)
     {
-        madLib(msg, '^(\\W+)?(pus*\\w+|clit|cunt|klit|kunt)(\\w+)?', nounArray,true,'\\b(wet)(\\w+)?',adjArray);
-        madLib(msg, '^(\\W+)?(\\s+)?(p)(\\s+)?(u)(\\s+)?(s)(\\s+)(s)?(\\s+)(y)(\\s+)?(\\W+)?$', nounArray,true,'\\b(wet)(\\w+)?',adjArray);
-        madLib(msg, '^(\\W+)?(di|co)(c|k|ck|q)$', nounArray,true,'\\b(hard)(\\w+)?',adjArray);
-        madLib(msg, '^(\\W+)? (\\s+)? (d|c)(\\s+)?(i|o)(\\s+)?(c)(\\s+)(k)?(\\s+)?(\\W+)?$', nounArray,true,'\\b(hard)(\\w+)?',adjArray);
-        madLib(msg, '^(\\W+)?(sq)(u)?(i)(u)?(rt)', verbArray);
-        madLib(msg, '^(\\W+)?(fart)(\\W+)?', verbArray);
+        madLib(msg, '\\b(pus*\\w+|clit|cunt|klit|kunt)(\\w+)?', nounArray,true,'\\b(wet)(\\w+)?',adjArray);
+        madLib(msg, '\\b(di|co)(c)?(k)?(\\w+)?', nounArray,true,'\\b(hard)(\\w+)?',adjArray);
+        madLib(msg, '\\b(sq)(u)?(i)(u)?(rt)', verbArray);
+        madLib(msg, '\\b(fart)(\\w+)?', verbArray);
     }
     else
     {
-        insertWord(msg, '^(\\W+)?(pus*\\w+|clit|cunt|klit|kunt)(\\w+)?',true,'\\b(wet)(\\w+)?');
-        insertWord(msg, '^(\\W+)?(\\s+)?(p)(\\s+)?(u)(\\s+)?(s)(\\s+)(s)?(\\s+)(y)(\\s+)?(\\W+)?$',true,'\\b(hard)(\\w+)?');
-        insertWord(msg, '^(\\W+)? (\\s+)? (d|c)(\\s+)?(i|o)(\\s+)?(c)(\\s+)(k)?(\\s+)?(\\W+)?$');
-        insertWord(msg, '^(\\W+)?(fart)(\\w+)?');
-        insertWord(msg, '^(\\W+)?(sq)(u)?(i)(u)?(rt)');
-        insertWord(msg, '^(\\W+)?(di|co)(c|k|ck|q)$',true,'\\b(hard)(\\w+)?');
+        insertWord(msg, '\\b(pus*\\w+|clit|cunt|klit|kunt)(\\w+)?',true,'\\b(wet)(\\w+)?');
+        insertWord(msg, '\\b(di|co)(c)?(k)?(\\w+)?',true,'\\b(hard)(\\w+)?');
+        insertWord(msg, '\\b(sq)(u)?(i)(u)?(rt)');
+        insertWord(msg, '\\b(fart)(\\w+)?');
     }
 }
 
@@ -450,18 +447,18 @@ function averageMod(msg)
     if(mad_lib)
     {
         easyMod(msg);
-        madLib(msg, '^(\\W+)?(com|cum|kum|kom)(m)?(e)?(\\W+)?$', verbArray);
-        madLib(msg, '^(\\W+)?(dad)(d)?(y)?(\\W+)?$', nounArray);
-        madLib(msg, '^(\\W+)?(su)(c|k|ck|q)(\\W+)?$', verbArray);
-        madLib(msg, '^(\\W+)?(lic|lik)(k)?(\\W+)?$', verbArray);
+        madLib(msg, '\\b(com|cum|kum|kom)(m)?(e)?', verbArray);
+        madLib(msg, '\\b(dad)(d)?(y)?(\\w+)?', nounArray);
+        madLib(msg, '\\b(su)(k)?(c)?(k)?', verbArray);
+        madLib(msg, '\\b(lic|lik)(k)?', verbArray);
     }
     else
     {
         easyMod(msg);
-        insertWord(msg, '^(\\W+)?(com|cum|kum|kom)(m)?(e)?');
-        insertWord(msg, '^(\\W+)?(dad)(d)?(y)?(\\w+)?');
-        insertWord(msg, '^(\\W+)?(su)(k)?(c)?(k)?');
-        insertWord(msg, '^(\\W+)?(lic|lik)(k)?');
+        insertWord(msg, '\\b(com|cum|kum|kom)(m)?(e)?');
+        insertWord(msg, '\\b(dad)(d)?(y)?(\\w+)?');
+        insertWord(msg, '\\b(su)(k)?(c)?(k)?');
+        insertWord(msg, '\\b(lic|lik)(k)?');
     }
 }
 
@@ -471,14 +468,14 @@ function toughMod(msg)
     if(mad_lib)
     {
         averageMod(msg);
-        madLib(msg, '^(\\W+)?(tit)t?(s|ies|ie)?(\\w+)?', nounArray,true,'\\b(big|fat|huge)(\\w+)?',adjArray);
-        madLib(msg, '^(\\W+)?(ass)(hol)?(\\w+)?', nounArray);
+        madLib(msg, '\\b(tit)t?(s|ies|ie)?(\\w+)?', nounArray,true,'\\b(big|fat|huge)(\\w+)?',adjArray);
+        madLib(msg, '\\b(ass)(hol)?(\\w+)?', nounArray);
     }
     else
     {
         averageMod(msg);
-        insertWord(msg, '^(tit)t?(s|ies|ie)?(\\w+)?',true,'\\b(big|fat|huge)(\\w+)?');
-        insertWord(msg, '^(ass)(hol)?(\\w+)?');
+        insertWord(msg, '\\b(tit)t?(s|ies|ie)?(\\w+)?',true,'\\b(big|fat|huge)(\\w+)?');
+        insertWord(msg, '\\b(ass)(hol)?(\\w+)?');
     }
 }
 
