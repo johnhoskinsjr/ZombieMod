@@ -179,7 +179,7 @@ cb.onLeave(function(user)
         logout_time = 1;
     }
 });
-
+/*
 //This function is call when the tip event happens
 cb.onTip(function (tip) 
 {
@@ -215,7 +215,7 @@ cb.onTip(function (tip)
         };
     };
 });
-
+*/
 /*
  * This is the event called when a user sends a message
  */
@@ -232,17 +232,20 @@ cb.onMessage(function (msg)
                  case modEnum.off:
                     modLvl = modEnum.easy;
                     msg['m'] = 'Now at Level 1';
-                    cb.sendNotice('You\'re on the easiest setting kitty!',cb.room_slug,'','#00b33c','bold');
+                    cb.sendNotice('You\'re on the easiest setting kitty! \n\
+                                   Now blocking dick, cock, squirt, and fart.',cb.room_slug,'','#00b33c','bold');
                     break;
                 case modEnum.easy:
                     modLvl = modEnum.avg;
                     msg['m'] = 'Now at Level 2';
-                    cb.sendNotice('This is a more average setting kitty.',cb.room_slug,'','#00b33c','bold');
+                    cb.sendNotice('This is a more average setting kitty.\n\
+                                    Now blocking cum, daddy, suck, and lick.',cb.room_slug,'','#00b33c','bold');
                     break;
                 case modEnum.avg:
                     modLvl = modEnum.tough;
                     msg['m'] = 'Now at Level 3';
-                    cb.sendNotice('No need to worry kitty, zombie is here to protect you. =)',cb.room_slug,'','#00b33c','bold');
+                    cb.sendNotice('No need to worry kitty, zombie is here to protect you. =)\n\
+                                    Now blocking titties, ass, and asshole',cb.room_slug,'','#00b33c','bold');
                     break;
                 case modEnum.tough:
                     msg['m'] = 'Already on Level 3';
@@ -264,17 +267,20 @@ cb.onMessage(function (msg)
                 case modEnum.easy:
                     modLvl = modEnum.off;
                     msg['m'] = 'Filter turned off';
-                    cb.sendNotice('Be careful kitty, you don\'t want zombie\'s help. :(',cb.room_slug,'','#00b33c','bold');
+                    cb.sendNotice('Be careful kitty, you don\'t want zombie\'s help. :(\n\
+                                    No longer blocking dick, cock, squirt, and fart.',cb.room_slug,'','#00b33c','bold');
                     break;
                 case modEnum.avg:
                     modLvl = modEnum.easy;
                     msg['m'] = 'Now at Level 1';
-                    cb.sendNotice('You\'re on the easiest setting kitty!',cb.room_slug,'','#00b33c','bold');
+                    cb.sendNotice('You\'re on the easiest setting kitty!\n\
+                                     No longer blocking cum, daddy, suck, and lick.',cb.room_slug,'','#00b33c','bold');
                     break;
                 case modEnum.tough:
                     modLvl = modEnum.avg;
                     msg['m'] = 'Now at Level 2';
-                    cb.sendNotice('This is a more average setting kitty.',cb.room_slug,'','#00b33c','bold');
+                    cb.sendNotice('This is a more average setting kitty.\n\
+                                    No longer blocking titties, ass, and asshole',cb.room_slug,'','#00b33c','bold');
             }
             msg['X-Spam'] = true;
             return msg;
@@ -328,8 +334,9 @@ cb.onMessage(function (msg)
         var sticky = msg['m'].search(/(.)\1{3,}/i);
             if(sticky > -1)
             {
-                    msg['m'] = 'Sorry, I face smashed my keyboard...';
-                    return msg;
+                msg['X-Spam'] = true;
+                msg['m'] = 'Message blocked for sticky keys.';
+                return msg;
             };
     };
     //Block baby names if broadcaster wants to
@@ -350,8 +357,10 @@ cb.onMessage(function (msg)
         var feet = msg['m'].search(/(.+)?(please)?(.+)?(show|see)(.+)?(feet)(.+)?(please)?(.+)?/i);
             if(feet > -1)
             {
-                    msg['m'] = 'Sorry, I forgot feet request belong in tipnotes...';
-                    return msg;
+                msg['X-Spam'] = true;
+                msg['m'] = 'Broadcaster did not see message.'
+                cb.sendNotice('Feet request are for tipnotes, and not 1 token',msg['user'],'','#00b33c','bold');
+                return msg;
             };
     };
     
@@ -423,12 +432,12 @@ cb.onTip(function (tip)
 cb.settings_choices = [
     {name:'mad_lib', type:'choice',
         choice1:'Yes',
-        choice2:'No', defaultValue: 'Yes', label:'Mad Lib'},
+        choice2:'No', defaultValue: 'No', label:'Mad Lib'},
     {name:'moderator_level', type:'choice',
         choice1:'Off',
         choice2:'Laid Back',
         choice3:'Average',
-        choice4:'Body Guard', defaultValue:'Average'},
+        choice4:'Body Guard', defaultValue:'Laid Back'},
     {name:'is_sticky', type:'choice',
         choice1:'Yes',
         choice2:'No', defaultValue: 'Yes', label:'Block Sticky Keys'},
@@ -455,16 +464,16 @@ function easyMod(msg)
     if(mad_lib)
     {
        // madLib(msg, '\\b(pus*\\w+|clit|cunt|klit|kunt)(\\w+)?', nounArray,true,'\\b(wet)(\\w+)?',adjArray);
-        madLib(msg, '\\b(di|co)(c|k|ck|kc|q)?', nounArray,true,'\\b(hard)(\\w+)?',adjArray);
+        madLib(msg, '\\b(di|co)(c|k|ck|kc|q)(s)?(\\b)', nounArray,true,'\\b(hard)',adjArray);
         madLib(msg, '\\b(sq)(u)?(i)(u)?(rt)', verbArray);
-        madLib(msg, '\\b(fart)', verbArray);
+        madLib(msg, '\\b(fart)(s)?', verbArray);
     }
     else
     {
         //insertWord(msg, '\\b(pus*\\w+|clit|cunt|klit|kunt)(\\w+)?$',true,'\\b(wet)(\\w+)?');
-        insertWord(msg, '\\b(di|co)(c|k|ck|kc|q)?$',true,'\\b(hard)(\\w+)?');
-        insertWord(msg, '\\b(sq)(u)?(i)(u)?(rt)');
-        insertWord(msg, '\\b(fart)(\\W+)?');
+        insertWord(msg, '\\b(di|co)(c|k|ck|kc|q)(s)?(\\b)',true,'\\b(hard)');
+        insertWord(msg, '\\b(sq)(u)?(i)(u)?(rt)\\b');
+        insertWord(msg, '\\b(fart)(s)?\\b');
     }
 }
 
@@ -474,18 +483,18 @@ function averageMod(msg)
     if(mad_lib)
     {
         easyMod(msg);
-        madLib(msg, '\\b(com|cum|kum|kom)(m)?(e)?$', verbArray);
-        madLib(msg, '\\b(dad)(d)?(y)?$?', nounArray);
-        madLib(msg, '\\b(su)(k|c|ck|kc|q)$', verbArray);
-        madLib(msg, '\\b(li)(k|c|ck|kc|q)?$', verbArray);
+        madLib(msg, '\\b(com|cum|kum|kom)(m)?(e)?(\\b))', verbArray);
+        madLib(msg, '\\b(dad)(d)?(y)?(\\b)', nounArray);
+        madLib(msg, '\\b(su)(k|c|ck|kc|q)', verbArray);
+        madLib(msg, '\\b(li)(k|c|ck|kc|q)', verbArray);
     }
     else
     {
         easyMod(msg);
-        insertWord(msg, '\\b(com|cum|kum|kom)(m)?(e)?$');
-        insertWord(msg, '\\b(com|cum|kum|kom)(m)?(e)?$');
-        insertWord(msg, '\\b(com|cum|kum|kom)(m)?(e)?$');
-        insertWord(msg, '\\b(com|cum|kum|kom)(m)?(e)?$');
+        insertWord(msg, '\\b(com|cum|kum|kom)(m)?(e)?(\\b)');
+        insertWord(msg, '\\b(dad)(d)?(y)?(\\b)');
+        insertWord(msg, '\\b(su)(k|c|ck|kc|q)');
+        insertWord(msg, '\\b(li)(k|c|ck|kc|q)');
     }
 }
 
@@ -495,14 +504,14 @@ function toughMod(msg)
     if(mad_lib)
     {
         averageMod(msg);
-        madLib(msg, '\\b(tit)t?(s|ies|ie)?(\\w+)?', nounArray,true,'\\b(big|fat|huge)(\\w+)?',adjArray);
-        madLib(msg, '\\b(ass)(hol)?(\\w+)?', nounArray);
+        madLib(msg, '\\b(tit)t?(s|ies|ie)?(\\b)', nounArray,true,'\\b(big|fat|huge)(\\b)',adjArray);
+        madLib(msg, '\\b(ass)(hol)?(e)?(\\b)', nounArray);
     }
     else
     {
         averageMod(msg);
-        insertWord(msg, '\\b(tit)t?(s|ies|ie)?(\\w+)?',true,'\\b(big|fat|huge)(\\w+)?');
-        insertWord(msg, '\\b(ass)(hol)?(\\w+)?');
+        insertWord(msg, '\\b(tit)t?(s|ies|ie)?(\\b)',true,'\\b(big|fat|huge)(\\b)');
+        insertWord(msg, '\\b(ass)(hol)?(e)?(\\b)');
     }
 }
 
