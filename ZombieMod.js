@@ -160,9 +160,7 @@ cb.onEnter(function(user)
         {
             if(cb.room_slug == 'thekittykatbar')
             {
-                cb.chatNotice('Good Morning delightful Kitty Kat!!! \n\
-                            \n\
-                            It\'s your favorite zombie ;) Mwuah!'
+                cb.chatNotice('Good Morning Kitty.'
                             ,cb.room_slug ,'','#00b33c','bold');
             }
         };
@@ -267,20 +265,17 @@ cb.onMessage(function (msg)
                 case modEnum.easy:
                     modLvl = modEnum.off;
                     msg['m'] = 'Filter turned off';
-                    cb.sendNotice('Be careful kitty, you don\'t want zombie\'s help. :(\n\
-                                    No longer blocking dick, cock, squirt, and fart.',cb.room_slug,'','#00b33c','bold');
+                    cb.sendNotice('Be careful kitty, you don\'t want zombie\'s help.',cb.room_slug,'','#00b33c','bold');
                     break;
                 case modEnum.avg:
                     modLvl = modEnum.easy;
                     msg['m'] = 'Now at Level 1';
-                    cb.sendNotice('You\'re on the easiest setting kitty!\n\
-                                     No longer blocking cum, daddy, suck, and lick.',cb.room_slug,'','#00b33c','bold');
+                    cb.sendNotice('You\'re on the easiest setting kitty!',cb.room_slug,'','#00b33c','bold');
                     break;
                 case modEnum.tough:
                     modLvl = modEnum.avg;
                     msg['m'] = 'Now at Level 2';
-                    cb.sendNotice('This is a more average setting kitty.\n\
-                                    No longer blocking titties, ass, and asshole',cb.room_slug,'','#00b33c','bold');
+                    cb.sendNotice('This is a more average setting kitty.',cb.room_slug,'','#00b33c','bold');
             }
             msg['X-Spam'] = true;
             return msg;
@@ -606,7 +601,7 @@ function insertWord(msg, expression, is_optional, optional_regex)
 //Sends commands
 function showCommands()
 {
-    cb.sendNotice('Good morning Kitty! I hope you have a wonderful day! Mwuah!\n\
+    cb.sendNotice('Good morning Kitty! I hope you have a wonderful day!\n\
                         Type /beefup if you want to increase level of filtering. \n\
                        Type /beefdown if you want to lower level of filtering.\n\
                         Type /kitty if you want to turn off mad libs.\n\
